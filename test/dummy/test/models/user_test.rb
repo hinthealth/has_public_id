@@ -41,6 +41,7 @@ class UserTest < ActiveSupport::TestCase
     u = User.create(name: 'joey')
     assert_equal u, User.find_by_public_id!(u.to_param), "Can't be looked up by #{u.to_param}"
     assert_raises(ActiveRecord::RecordNotFound){ User.find_by_public_id!('bad_key') }
+    assert_raises(ActiveRecord::RecordNotFound){ User.find_by_public_id!(nil) }
   end
 
   test "initialize_public_ids!" do
@@ -48,6 +49,16 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 3, User.where(ident: nil).count
     User.initialize_public_ids!
     assert_equal User.where(ident: nil).count, 0
+  end
+
+  test "use group-by sql" do
+    grouped = User.select('name, count(name) as count').group('name')
+    assert_equal grouped.length, User.all.map(&:name).count
+    assert_equal grouped.map(&:name).sort, User.all.map(&:name).uniq.sort
+    grouped.map(&:count).each do |count|
+      assert_equal count, 1
+    end
+    assert_equal grouped[0].has_attribute?(:ident), false
   end
 
 end
