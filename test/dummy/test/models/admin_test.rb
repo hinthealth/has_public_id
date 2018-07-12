@@ -2,7 +2,6 @@ require 'test_helper'
 
 class AdminTest < ActiveSupport::TestCase
   fixtures :admins
-  self.use_transactional_fixtures = true
 
   test "inherited_class_has_public_id_attr" do
     assert Admin.respond_to?(:public_id_attr)

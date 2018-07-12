@@ -10,7 +10,7 @@ module HasPublicId
       def initialize_public_id
         if has_attribute?(public_id_attr)
           read_attribute(public_id_attr) or
-          write_attribute(public_id_attr, self.class.new_public_id)
+            write_attribute(public_id_attr, self.class.new_public_id)
         end
       end
     end

@@ -2,7 +2,6 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   fixtures :users
-  self.use_transactional_fixtures = true
 
   test "identifier_initializes" do
     assert User.new.ident.present?, "should have an id when initialized"
